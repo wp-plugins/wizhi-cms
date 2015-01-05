@@ -28,15 +28,15 @@ if ( ! function_exists( 'wizhi_shortcode_page_cont' ) ) {
 		$page = get_post( $id );
 
 		// 输出
-		ob_start();
-		echo wp_trim_words( $page->post_content, $cut, "..." );
+		$retour  = '';
+		$retour  .= wp_trim_words( $page->post_content, $cut, "..." );
 		if ( $more == "ture" ) {
-			echo '<a target="_blank" href="' . get_page_link( $id ) . '">更多>></a>';
+			$retour .= '<a target="_blank" href="' . get_page_link( $id ) . '">更多>></a>';
 		} else {
-			echo '';
+			$retour .= '';
 		}
 
-		return ob_get_clean();
+		return $retour;
 		wp_reset_postdata();
 	}
 }
@@ -79,32 +79,49 @@ if ( ! function_exists( 'wizhi_shortcode_title_list' ) ) {
 			)
 		);
 
-		$cat      = get_term_by( 'slug', $tag, $tax );
-		$cat_link = get_term_link( $tag, $tax );
+		$cat          = get_term_by( 'slug', $tag, $tax );
+        $cat_name     = $cat->name;
+		$cat_link     = get_term_link( $tag, $tax );
 
 		// 输出
 		global $post;
 		$myposts = get_posts( $args );
-		$retour  = '<div class="' . $tag . ' news-box">';
+        $retour  = '';
 		if ( $heading == 'false' ) {
-			$retour .= '';
+			$retour .= '<ul class="zui-list">';
+            foreach ( $myposts as $post ) :
+                setup_postdata( $post );
+                $retour .= '<li class="zui-list-item">';
+                if ( $time == 'true' ) {
+                    $retour .= '<span class="pull-right time">' . get_the_time( 'm-d' ) . '</span>';
+                } else {
+                    $retour .= '';
+                }
+                $retour .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
+                $retour .= '</li>';
+            endforeach;
+            $retour .= '</ul>';
 		} else {
-			$retour .= '<div class="news-box-head"><h2><a class="more r" href="' . $cat_link . '" target="_blank">更多></a><a href="' . $cat_link . '">' . $cat->name . '</h2></a></div>';
+            $retour .= '<div class="zui-box ' . $tag . '">';
+			$retour .= '<div class="zui-box-head">';
+            $retour .= '<h3 class="zui-box-head-title"><a href="' . $cat_link . '">' . $cat_name . '</a></h3>';
+            $retour .= '<a class="more pull-right" href="' . $cat_link . '" target="_blank">更多></a>';
+            $retour .= '</div>';
+            $retour .= '<div class="zui-box-container"><ul class="zui-list">';
+            foreach ( $myposts as $post ) :
+                setup_postdata( $post );
+                $retour .= '<li class="zui-list-item">';
+                if ( $time == 'true' ) {
+                    $retour .= '<span class="pull-right time">' . get_the_time( 'm-d' ) . '</span>';
+                } else {
+                    $retour .= '';
+                }
+                $retour .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
+                $retour .= '</li>';
+            endforeach;
+            $retour .= '</ul></div></div>';
 		}
-		$retour .= '<div class="desc"><ul>';
-		foreach ( $myposts as $post ) :
-			setup_postdata( $post );
-			$retour .= "<li>";
-			if ( $time == 'true' ) {
-				$retour .= '<span class="pull-right time">' . get_the_time( 'm-d' ) . '</span>';
-			} else {
-				$retour .= '';
-			}
-			$retour .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
-			$retour .= '</li>';
-		endforeach;
-		$retour .= '</ul></div></div>';
-
+		
 		return $retour;
 		wp_reset_postdata();
 	}
@@ -114,7 +131,7 @@ add_shortcode( 'title_list', 'wizhi_shortcode_title_list' );
 
 /* 图文混排样式简码
 *  需要的参数：文章类型，分类法，分类，缩略图别名，标题字数，是否显示时间，内容字数
-*  使用方法：<?php echo do_shortcode('[photo_list type="home" tax="home_tag" tag="yxdt" num="6" cut="26" heading="false" time="true" thumbs="maintain" cut="6" sticky="true" column="pure-u-1-5"]'); ?>
+*  使用方法：<?php echo do_shortcode('[photo_list type="home" tax="home_tag" tag="yxdt" num="6" cut="26" heading="false" time="true" thumbs="maintain" cut="6" sticky="true" class="pure-u-1-5"]'); ?>
 */
 if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 	function wizhi_shortcode_photo_list( $atts ) {
@@ -128,7 +145,7 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 			'cut'     => '20',
 			'content' => '120',
 			'heading' => true,
-			'column'  => 'pure-u-1-4'
+			'class'  => 'pure-u-1-4'
 		);
 		extract( shortcode_atts( $default, $atts ) );
 
@@ -147,8 +164,9 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 				)
 			)
 		);
-		$cat  = get_term_by( 'slug', $tag, $tax );
-		$name = $cat->name;
+		$cat          = get_term_by( 'slug', $tag, $tax );
+		$cat_name    = $cat->name;
+        $cat_link     = get_term_link( $tag, $tax );
 
 		if($position == "left"){
 			$position = "zui-media-cap-left";
@@ -159,37 +177,73 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 		}
 
 		// 输出
-		ob_start();
 		global $post;
 		$myposts = get_posts( $args );
-		if ( $heading != false ) {
-			echo '<h2><a class="pull-right more" href="' . get_term_link( $tag, $tax ) . '" target="_blank">更多></a><a href="' . get_term_link( $tag, $tax ) . '">' . $name . '</a></h2>';
-		}
+        $retour  = '';
 
-		echo '<div class="zui-medias">';
-		foreach ( $myposts as $post ) :
-			setup_postdata( $post );
-			echo '<div class="' . $column . ' zui-media">';
-			if ( ! empty( $thumbs ) ) {
-				echo '<a class="zui-media-cap ' . $position . '" target="_blank" href="', get_permalink(), '">';
-				if ( has_post_thumbnail() ) {
-					the_post_thumbnail( $thumbs );
-				}
-				echo '</a>';
-			}
-			if ( ! empty( $content ) ) {
-				echo '<div class="zui-media-body">';
-				echo '<div class="zui-media-body-title"><a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a></div>';
-				echo wp_trim_words( $post->post_content, $content, "..." );
-				echo '</div>';
-			} else {
-				echo '<a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
-			}
-			echo '</div>';
-		endforeach;
-		echo '</ul>';
+		if ( $heading == false ) {
+	        $retour .= '<div class="zui-medias">';
+            foreach ( $myposts as $post ) :
+                setup_postdata( $post );
+                $retour .= '<div class="' . $class . ' zui-media">';
+                if ( ! empty( $thumbs ) ) {
+                    $retour .= '<a class="zui-media-cap ' . $position . '" target="_blank" href="'. get_permalink(). '">';
+                    if ( has_post_thumbnail() ) {
+                        $retour .= get_the_post_thumbnail( $post->ID, $thumbs ); 
+                    }
+                    $retour .= '</a>';
+                }
+                if ( ! empty( $content ) ) {
+                    $retour .= '<div class="zui-media-body">';
+                    $retour .= '<div class="zui-media-body-title"><a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a></div>';
+                    $retour .= wp_trim_words( $post->post_content, $content, "..." );
+                    $retour .= '</div>';
+                } else {
+                    $retour .= '<a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
+                }
+                $retour .= '</div>';
+            endforeach;
+            $retour .= '</div>';
 
-		return ob_get_clean();
+        } else {
+            $retour .= '<div class="zui-box ' . $tag . '">';
+            $retour .= '<div class="zui-box-head">';
+            $retour .= '<h3 class="zui-box-head-title"><a href="' . $cat_link . '">' . $cat_name . '</a></h3>';
+            $retour .= '<a class="more pull-right" href="' . $cat_link . '" target="_blank">更多></a>';
+            $retour .= '</div>';
+            $retour .= '<div class="zui-box-container">';
+            $retour .= '<div class="zui-box-content">';
+
+                $retour .= '<div class="zui-medias">';
+                foreach ( $myposts as $post ) :
+                    setup_postdata( $post );
+                    $retour .= '<div class="' . $class . ' zui-media">';
+                    if ( ! empty( $thumbs ) ) {
+                        $retour .= '<a class="zui-media-cap ' . $position . '" target="_blank" href="'. get_permalink(). '">';
+                        if ( has_post_thumbnail() ) {
+                            $retour .= get_the_post_thumbnail( $post->ID, $thumbs ); 
+                        }
+                        $retour .= '</a>';
+                    }
+                    if ( ! empty( $content ) ) {
+                        $retour .= '<div class="zui-media-body">';
+                        $retour .= '<div class="zui-media-body-title"><a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a></div>';
+                        $retour .= wp_trim_words( $post->post_content, $content, "..." );
+                        $retour .= '</div>';
+                    } else {
+                        $retour .= '<a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
+                    }
+                    $retour .= '</div>';
+                endforeach;
+                $retour .= '</div>';
+
+            $retour .= '</div>';
+            $retour .= '</div>';
+            $retour .= '</div>';
+
+        }
+
+		return $retour;
 		wp_reset_postdata();
 	}
 }

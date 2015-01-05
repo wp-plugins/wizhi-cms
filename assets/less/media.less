@@ -1,5 +1,4 @@
 .zui-media {
-	border-bottom: 1px solid #eee;
 	padding: 10px 0;
 }
 
@@ -8,15 +7,12 @@
 }
 
 .zui-media-cap {
-	width: 64px;
-	height: 64px;
 	overflow: hidden;
 	display: block;
 	margin-right: 10px;
-	background: #f8f8f8;
-	border: 1px solid #f2f1ec;
 	img {
-		width: 64px;
+		max-width: 100%;
+		height: auto;
 	}
 }
 
@@ -26,23 +22,21 @@
 }
 
 .zui-media-cap-right{
+	width: 64px;
+	height: 64px;
 	margin-left: 10px;
 	float: right;
 }
 
 .zui-media-cap-left{
+	width: 64px;
+	height: 64px;
 	margin-left: 10px;
-	float: right;
+	float: left;
 }
 
 .zui-media-body {
-	line-height: 1.75;
-	a {
-		color: #963;
-	}
-	p {
-		line-height: 22px;
-	}
+
 }
 
 .zui-media-body-des {
@@ -61,41 +55,5 @@
 }
 
 .zui-media-body-title {
-	a {
-		color: #333;
-	}
-	a:hover {
-		color: #ec5524;
-	}
-	a:visited {
-		color: #999;
-	}
-}
 
-.zui-media-box {
-	border: 1px solid #eee;
-	padding: 0;
-	min-height: 64px;
-	_height: 64px;
-	_zoom: 1;
-	.media-cap {
-		border: none;
-		background: #2ecc71;
-		color: #fff;
-		text-align: center;
-		margin-right: 10px;
-		height: auto;
-		i {
-			font-size: 24px;
-			text-align: center;
-			line-height: 64px;
-		}
-		.icon-envelope {
-			height: 80px;
-			line-height: 80px;
-		}
-	}
-	.media-body {
-		padding: 10px 10px 10px 0;
-	}
 }

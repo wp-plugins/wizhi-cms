@@ -27,8 +27,8 @@ gulp.task('css',['less', 'clean'], function() {
   gulp.src(['./assets/css/*.css','!./assets/css/zui.min.css'])
     .pipe(concat('zui.css'))
     .pipe(gulp.dest('./assets'))
-    //.pipe(minifycss())
-    //.pipe(gulp.dest('./'))
+    .pipe(minifycss())
+    .pipe(gulp.dest('./assets'))
 });
  
 // 合并，压缩js文件
