@@ -1,0 +1,99 @@
+.zui-list {
+  margin: 0;
+  padding: 10px;
+  list-style: square inside;
+}
+.zui-list-item {
+  font-size: 9px;
+  line-height: 20px;
+}
+.zui-list-item a {
+  line-height: 20px;
+  text-decoration: none;
+}
+.zui-list-item a:hover {
+  text-decoration: underline;
+}
+.zui-list-item a,
+.zui-list-item span.zui-list-item-text {
+  font-size: 12px;
+  vertical-align: middle;
+}
+.zui-list-gray .zui-list-item {
+  color: #808080;
+}
+.zui-list-graylink .zui-list-item {
+  color: #808080;
+}
+.zui-list-graylink .zui-list-item a {
+  color: #666;
+}
+.zui-list-nosquare {
+  list-style: none;
+}
+.zui-dlist {
+  display: inline-block;
+  color: #333;
+  font-size: 12px;
+  line-height: 2.2;
+}
+.zui-dlist-tit {
+  float: left;
+  font-weight: 700;
+  width: 20%;
+  text-align: right;
+  margin: 0;
+}
+.zui-dlist-det {
+  float: left;
+  width: 80%;
+  text-align: left;
+  margin: 0;
+}
+.list {
+  border-top: none;
+  background: #fff;
+  color: #333;
+}
+.list li {
+  position: relative;
+  display: inline-block;
+  _display: inline;
+  width: 100%;
+}
+.list li a {
+  display: block;
+  padding: 10px 15px;
+  *zoom: 1;
+  border-top: 1px solid #f3f2f1;
+  color: #333;
+  line-height: 1.1;
+}
+.list li a:hover {
+  background: #ff7744;
+}
+.list li a:hover,
+.list .active a {
+  background: #95c162;
+  text-decoration: none;
+  color: #fff;
+}
+.list-item-badge {
+  display: inline-block;
+  color: #fff;
+  position: absolute;
+  right: 15px;
+  top: 11px;
+  line-height: 16px;
+  height: 16px;
+  background: #ec5524;
+  border-radius: 8px;
+  padding: 0 6px;
+  font-size: 12px;
+  pointer-events: none;
+}
+.list li:hover .list-item-badge,
+.list .active .list-item-badge {
+  background: #fff;
+  color: #ec5524;
+}

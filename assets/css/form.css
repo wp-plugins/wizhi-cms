@@ -1,0 +1,177 @@
+.zui-form {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.zui-form fieldset {
+  border: 0;
+}
+.zui-form legend {
+  display: none;
+}
+.zui-form,
+.zui-form * {
+  list-style: none;
+}
+.zui-form-explain {
+  margin: 0;
+  padding: 8px 0 0;
+  font-size: 12px;
+  color: #B2B2B2;
+}
+.zui-form-other {
+  margin-left: 8px;
+}
+.zui-form-text {
+  display: inline-block;
+  margin-top: 6px;
+  *display: inline;
+  *zoom: 1;
+}
+.zui-form-item:after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+.zui-form-item {
+  padding: 0 5px 20px 170px;
+  zoom: 1;
+}
+.zui-form-item select {
+  vertical-align: middle;
+  margin: 4px 0 0;
+}
+.zui-form-item input {
+  vertical-align: middle;
+}
+.zui-form-item .zui-input {
+  color: #595959;
+  vertical-align: middle;
+  *vertical-align: -5px;
+}
+.zui-form-item .zui-textarea {
+  border-color: #A6A6A6 #CCC #CCC;
+  color: #4d4d4d;
+  width: 322px;
+  resize: none;
+}
+.zui-form-item-large .zui-input {
+  width: 320px;
+}
+.zui-form-item-block .zui-label {
+  display: block;
+  float: none;
+  margin-left: 0;
+  padding-top: 5px;
+  font-size: 14px;
+  text-align: left;
+}
+.zui-form-item-error .zui-input,
+.zui-form-item-error .zui-textarea {
+  border: 1px #F00 solid;
+  color: #F00;
+}
+.zui-form-item-error .zui-input-reset {
+  border: 1px #9C9C9C solid;
+  color: #000;
+}
+.zui-form-item-error .zui-form-explain {
+  color: #FF5243;
+}
+.zui-form-large .zui-input {
+  font-size: 14px;
+  height: 18px;
+  line-height: 18px;
+  padding: 11px 10px;
+}
+.zui-form-large .zui-label {
+  padding-top: 12px;
+}
+.zui-input {
+  padding: 7px 9px;
+  line-height: 18px;
+  border: 1px solid #c1c1c1;
+  color: #595959;
+  font-size: 12px;
+  vertical-align: middle;
+}
+.zui-input-large {
+  width: 420px;
+}
+.zui-input:hover,
+.zui-textarea:hover,
+.zui-input-hover {
+  border: 1px #727272 solid;
+  border-top-color: #808080;
+}
+.zui-input:focus,
+.zui-textarea:focus,
+.zui-input-focus {
+  border: 1px #07f solid;
+  box-shadow: 0 0 3px #8cddff;
+  color: #595959;
+}
+.zui-textarea {
+  width: 420px;
+  min-width: 420px;
+  line-height: 15px;
+  border: 1px #9C9C9C solid;
+  padding: 3px 3px 0 4px;
+  overflow: auto;
+  font-family: Arial;
+  font-size: 12px;
+}
+.zui-input[disabled],
+.zui-textarea[disabled] {
+  border: 1px solid #ccc;
+  background: #f2f2f2;
+}
+.zui-input:disabled,
+.zui-textarea:disabled {
+  border: 1px solid #ccc;
+  background: #f2f2f2;
+}
+.placeholder {
+  color: #ccc;
+}
+.zui-input-checkcode {
+  width: 100px;
+  height: 24px;
+  line-height: 28px;
+  margin: 0;
+  padding: 2px 5px;
+}
+.zui-form-item-hover .zui-input,
+.zui-form-item-hover .zui-textarea {
+  border: 1px #727272 solid;
+}
+.zui-form-item-focus .zui-input,
+.zui-form-item-focus .zui-textarea {
+  border: 1px #07f solid;
+  box-shadow: 0 0 3px #8cddff;
+}
+.zui-form-item-focus .zui-form-explain,
+.zui-form-item-hover .zui-form-explain {
+  color: #333;
+}
+.zui-label {
+  float: left;
+  width: 170px;
+  margin-left: -180px;
+  padding-top: 5px;
+  text-align: right;
+  font-size: 14px;
+}
+.zui-form-required {
+  color: #FF0000;
+  font-family: SimSun;
+  font-size: 14px;
+  margin-right: 6px;
+}
+input.zui-checkbox {
+  vertical-align: baseline;
+}
+.zui-form-intro {
+  padding: 0 5px 6px 170px;
+}
