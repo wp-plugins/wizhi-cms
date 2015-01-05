@@ -8,8 +8,7 @@ Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Wizhi CMS 以简码的形式添加了中国一些CMS系统常用的调用标签，如织梦，PHPCMS等系统中的模板标签功能，
-同时添加了一些实用的功能函数，如创建文章类型自定义分类法函数，分页函数等等。
+Wizhi CMS 以简码的形式添加了中国一些CMS系统常用的调用标签，如织梦，PHPCMS等系统中的模板标签功能。
 
 == Description ==
 
