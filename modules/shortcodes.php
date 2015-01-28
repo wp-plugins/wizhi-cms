@@ -38,6 +38,7 @@ if ( ! function_exists( 'wizhi_shortcode_page_cont' ) ) {
 
 		return $retour;
 		wp_reset_postdata();
+        wp_reset_query();
 	}
 }
 add_shortcode( 'page_cont', 'wizhi_shortcode_page_cont' );
@@ -62,6 +63,19 @@ if ( ! function_exists( 'wizhi_shortcode_title_list' ) ) {
 		);
 		extract( shortcode_atts( $default, $atts ) );
 
+        // 判断是否查询分类
+        if( empty($tax) ){
+            $tax_query = '';
+        } else {
+            $tax_query = array(
+                array(
+                    'taxonomy' => $tax,
+                    'field'    => 'slug',
+                    'terms'    => $tag,
+                )
+            );
+        }
+
 		// 构建文章查询数组
 		$args = array(
 			'post_type'      => $type,
@@ -69,28 +83,22 @@ if ( ! function_exists( 'wizhi_shortcode_title_list' ) ) {
 			'order'          => 'DESC',
 			'posts_per_page' => $num,
 			'offset'         => $offset,
-			'no_found_rows'  => true,
-			'tax_query'      => array(
-				array(
-					'taxonomy' => $tax,
-					'field'    => 'slug',
-					'terms'    => $tag,
-				)
-			)
+			'tax_query'      => $tax_query
 		);
 
+        // get term archive name and link
 		$cat          = get_term_by( 'slug', $tag, $tax );
         $cat_name     = $cat->name;
 		$cat_link     = get_term_link( $tag, $tax );
 
 		// 输出
 		global $post;
-		$myposts = get_posts( $args );
+		$the_query = new WP_Query( $args );
+
         $retour  = '';
-		if ( $heading == 'false' ) {
+		if ( $heading == 'false' || empty($tax) ) {
 			$retour .= '<ul class="zui-list">';
-            foreach ( $myposts as $post ) :
-                setup_postdata( $post );
+            while( $the_query->have_posts() ) : $the_query->the_post();
                 $retour .= '<li class="zui-list-item">';
                 if ( $time == 'true' ) {
                     $retour .= '<span class="pull-right time">' . get_the_time( 'm-d' ) . '</span>';
@@ -99,7 +107,7 @@ if ( ! function_exists( 'wizhi_shortcode_title_list' ) ) {
                 }
                 $retour .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
                 $retour .= '</li>';
-            endforeach;
+            endwhile;
             $retour .= '</ul>';
 		} else {
             $retour .= '<div class="zui-box ' . $tag . '">';
@@ -108,8 +116,7 @@ if ( ! function_exists( 'wizhi_shortcode_title_list' ) ) {
             $retour .= '<a class="more pull-right" href="' . $cat_link . '" target="_blank">更多></a>';
             $retour .= '</div>';
             $retour .= '<div class="zui-box-container"><ul class="zui-list">';
-            foreach ( $myposts as $post ) :
-                setup_postdata( $post );
+            while( $the_query->have_posts() ) : $the_query->the_post();
                 $retour .= '<li class="zui-list-item">';
                 if ( $time == 'true' ) {
                     $retour .= '<span class="pull-right time">' . get_the_time( 'm-d' ) . '</span>';
@@ -118,12 +125,13 @@ if ( ! function_exists( 'wizhi_shortcode_title_list' ) ) {
                 }
                 $retour .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
                 $retour .= '</li>';
-            endforeach;
+            endwhile;
             $retour .= '</ul></div></div>';
 		}
 		
 		return $retour;
 		wp_reset_postdata();
+        wp_reset_query();
 	}
 }
 add_shortcode( 'title_list', 'wizhi_shortcode_title_list' );
@@ -139,9 +147,10 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 			'type'    => '',
 			'tax'     => '',
 			'tag'     => '',
-			'thumbs'  => '',
+			'thumbs'  => 'tumbnails',
 			'position'=> 'left',
-			'num'     => '8',
+			'num'     => '4',
+            'paged'   => '1',
 			'cut'     => '20',
 			'content' => '120',
 			'heading' => true,
@@ -149,43 +158,53 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 		);
 		extract( shortcode_atts( $default, $atts ) );
 
+        // 判断是否查询分类
+        if( empty($tax) ){
+            $tax_query = '';
+        } else {
+            $tax_query = array(
+                array(
+                    'taxonomy' => $tax,
+                    'field'    => 'slug',
+                    'terms'    => $tag,
+                )
+            );
+        }
+
+        $paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+
 		// 根据分类别名获取分类ID
 		$args = array(
 			'post_type'      => $type,
 			'orderby'        => 'post_date',
 			'order'          => 'DESC',
 			'posts_per_page' => $num,
-			'no_found_rows'  => true,
-			'tax_query'      => array(
-				array(
-					'taxonomy' => $tax,
-					'field'    => 'slug',
-					'terms'    => $tag,
-				)
-			)
+            'paged'          => $paged,
+            'tax_query'      => $tax_query
 		);
+
 		$cat          = get_term_by( 'slug', $tag, $tax );
-		$cat_name    = $cat->name;
+		$cat_name     = $cat->name;
         $cat_link     = get_term_link( $tag, $tax );
 
 		if($position == "left"){
 			$position = "zui-media-cap-left";
-		} elseif($position == "right"){
+		}elseif($position == "right"){
 			$position = "zui-media-cap-right";
-		} else {
+		}else{
 			$position = "zui-media-cap-top";
 		}
 
 		// 输出
 		global $post;
-		$myposts = get_posts( $args );
+		$wp_query = new WP_Query( $args );
         $retour  = '';
 
-		if ( $heading == false ) {
-	        $retour .= '<div class="zui-medias">';
-            foreach ( $myposts as $post ) :
-                setup_postdata( $post );
-                $retour .= '<div class="' . $class . ' zui-media">';
+		if ( $heading == false || empty($tax) ) {
+            $retour .= '<div class="zui-medias">';
+	        while( $wp_query->have_posts() ) : $wp_query->the_post();
+                $retour .= '<div class="' . $class . '">';
+                $retour .= '<div class=" zui-media">';
                 if ( ! empty( $thumbs ) ) {
                     $retour .= '<a class="zui-media-cap ' . $position . '" target="_blank" href="'. get_permalink(). '">';
                     if ( has_post_thumbnail() ) {
@@ -202,7 +221,9 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
                     $retour .= '<a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
                 }
                 $retour .= '</div>';
-            endforeach;
+                $retour .= '</div>';
+            endwhile;
+            $retour .= '</div>';
             $retour .= '</div>';
 
         } else {
@@ -215,9 +236,10 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
             $retour .= '<div class="zui-box-content">';
 
                 $retour .= '<div class="zui-medias">';
-                foreach ( $myposts as $post ) :
+                while( $wp_query->have_posts() ) : $wp_query->the_post();
                     setup_postdata( $post );
-                    $retour .= '<div class="' . $class . ' zui-media">';
+                    $retour .= '<div class="' . $class . '">';
+                    $retour .= '<div class="zui-media">';
                     if ( ! empty( $thumbs ) ) {
                         $retour .= '<a class="zui-media-cap ' . $position . '" target="_blank" href="'. get_permalink(). '">';
                         if ( has_post_thumbnail() ) {
@@ -234,7 +256,8 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
                         $retour .= '<a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
                     }
                     $retour .= '</div>';
-                endforeach;
+                    $retour .= '</div>';
+                endwhile;
                 $retour .= '</div>';
 
             $retour .= '</div>';
@@ -243,8 +266,11 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 
         }
 
+        wizhi_pagination(); 
+
 		return $retour;
 		wp_reset_postdata();
+        wp_reset_query();
 	}
 }
 add_shortcode( 'photo_list', 'wizhi_shortcode_photo_list' );
@@ -316,6 +342,7 @@ if ( ! function_exists( 'wizhi_shortcode_rs_slider' ) ) {
 
 		return ob_get_clean();
 		wp_reset_postdata();
+        wp_reset_query();
 	}
 }
 add_shortcode( 'rs_slider', 'wizhi_shortcode_rs_slider' );
@@ -393,6 +420,7 @@ if ( ! function_exists( 'wizhi_shortcode_thumb_carousel' ) ) {
 
 		return ob_get_clean();
 		wp_reset_postdata();
+        wp_reset_query();
 	}
 }
 add_shortcode( 'thumb_scroll', 'wizhi_shortcode_thumb_carousel' );

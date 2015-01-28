@@ -4,8 +4,6 @@
  *
  * @since mx 1.0
  */
-
-
 function wizhi_create_types( $slug, $name, $support, $is_publish ) {
 
 	//labels for custom post types
@@ -39,12 +37,11 @@ function wizhi_create_types( $slug, $name, $support, $is_publish ) {
 		'menu_position'      => 5,
 		'supports'           => $support,
 	);
-
 	register_post_type( $slug, $args_type );
 }
 
+function wizhi_create_taxs( $tax_slug, $hook_type, $tax_name, $hierarchical ) {
 
-function wizhi_create_taxs( $tax_slug, $hook_type, $tax_name ) {
 	//labels for custom taxomony
 	$labels_tax = array(
 		'name'              => $tax_name,
@@ -62,7 +59,7 @@ function wizhi_create_taxs( $tax_slug, $hook_type, $tax_name ) {
 
 	//args for custom taxomony
 	$args_tax = array(
-		'hierarchical'      => true,
+		'hierarchical'      => $hierarchical,
 		'labels'            => $labels_tax,
 		'show_ui'           => true,
 		'show_admin_column' => true,
@@ -72,5 +69,4 @@ function wizhi_create_taxs( $tax_slug, $hook_type, $tax_name ) {
 
 	register_taxonomy( $tax_slug, array( $hook_type ), $args_tax );
 }
-
 ?>
