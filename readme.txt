@@ -14,7 +14,9 @@ Wizhi CMS 以简码的形式添加了中国一些CMS系统常用的调用标签�
 
 Wizhi CMS 以简码的形式添加了中国一些CMS系统常用的调用标签，如织梦，PHPCMS等系统中的模板标签功能。
 
-如添加一个文章标题列表模块，只需要这样写：`<?php do_shortcode('[title_list type="post" tax="category" tag="default" num="6" cut="26" heading="0" time="true"]'); ?>`
+如添加一个文章标题列表模块，只需要这样写：
+
+`<?php do_shortcode('[title_list type="post" tax="category" tag="default" num="6" cut="26" heading="0" time="true"]'); ?>`
 
 参数：
 
@@ -42,11 +44,9 @@ Wizhi CMS 以简码的形式添加了中国一些CMS系统常用的调用标签�
 
 如需要添加一个文章类型，只需要这样写：
 
-```
-if ( function_exists ("wizhi_create_types")) {
+`<?php if ( function_exists ("wizhi_create_types")) {
     wizhi_create_types( "pro", "产品", array( 'title', 'editor', 'author', 'thumbnail', 'comments' ), true );
-}
-```
+} ?>`
 
 参数：
 
@@ -58,11 +58,9 @@ if ( function_exists ("wizhi_create_types")) {
 
 需要添加一个自定义分类方法，只需要这样写：
 
-```
-if (function_exists ("wizhi_create_taxs") ) {
+`<?php if (function_exists ("wizhi_create_taxs") ) {
     wizhi_create_taxs( "procat", 'pro', "产品分类", true);
-}
-```
+} ?>`
 
 参数：
 
@@ -72,6 +70,8 @@ if (function_exists ("wizhi_create_taxs") ) {
 * true：是否为层级分类，true为类似于分类目录的方法，false为类似于标签的方式
 
 BUG反馈和功能建议请发送邮件至：iwillhappy1314@gmail.com
+
+作者网址：[WordPress智库](http://www.wpzhiku.com/ "WordPress CMS 插件")
 
 
 == Installation ==
