@@ -99,13 +99,20 @@ if ( ! function_exists( 'wizhi_shortcode_title_list' ) ) {
 		if ( $heading == 'false' || empty($tax) ) {
 			$retour .= '<ul class="zui-list">';
             while( $the_query->have_posts() ) : $the_query->the_post();
+
+                //custom links
+                $cus_links =  get_post_meta( get_the_ID(), 'cus_links', true );
+                if( empty($cus_links) ){
+                    $cus_links = get_permalink();
+                }
+
                 $retour .= '<li class="zui-list-item">';
                 if ( $time == 'true' ) {
                     $retour .= '<span class="pull-right time">' . get_the_time( 'm-d' ) . '</span>';
                 } else {
                     $retour .= '';
                 }
-                $retour .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
+                $retour .= '<a href="' . $cus_links . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
                 $retour .= '</li>';
             endwhile;
             $retour .= '</ul>';
@@ -117,13 +124,20 @@ if ( ! function_exists( 'wizhi_shortcode_title_list' ) ) {
             $retour .= '</div>';
             $retour .= '<div class="zui-box-container"><ul class="zui-list">';
             while( $the_query->have_posts() ) : $the_query->the_post();
+
+                //custom links
+                $cus_links =  get_post_meta( get_the_ID(), 'cus_links', true );
+                if( empty($cus_links) ){
+                    $cus_links = get_permalink();
+                }
+
                 $retour .= '<li class="zui-list-item">';
                 if ( $time == 'true' ) {
                     $retour .= '<span class="pull-right time">' . get_the_time( 'm-d' ) . '</span>';
                 } else {
                     $retour .= '';
                 }
-                $retour .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
+                $retour .= '<a href="' . $cus_links . '" title="' . get_the_title() . '">' . get_the_title() . '</a>';
                 $retour .= '</li>';
             endwhile;
             $retour .= '</ul></div></div>';
@@ -151,8 +165,8 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 			'position'=> 'left',
 			'num'     => '4',
             'paged'   => '1',
-			'cut'     => '20',
-			'content' => '120',
+			'cut'     => '',
+			'content' => '',
 			'heading' => true,
 			'class'  => 'pure-u-1-4'
 		);
@@ -203,27 +217,35 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 		if ( $heading == false || empty($tax) ) {
             $retour .= '<div class="zui-medias">';
 	        while( $wp_query->have_posts() ) : $wp_query->the_post();
+
+                //custom links
+                $cus_links =  get_post_meta( get_the_ID(), 'cus_links', true );
+                if( empty($cus_links) ){
+                    $cus_links = get_permalink();
+                }
+
                 $retour .= '<div class="' . $class . '">';
                 $retour .= '<div class=" zui-media">';
-                if ( ! empty( $thumbs ) ) {
-                    $retour .= '<a class="zui-media-cap ' . $position . '" target="_blank" href="'. get_permalink(). '">';
+                if ( !empty( $thumbs ) ) {
+                    $retour .= '<a class="zui-media-cap ' . $position . '" target="_blank" href="'. $cus_links. '">';
                     if ( has_post_thumbnail() ) {
                         $retour .= get_the_post_thumbnail( $post->ID, $thumbs ); 
                     }
                     $retour .= '</a>';
                 }
-                if ( ! empty( $content ) ) {
+                if ( !empty( $content ) ) {
                     $retour .= '<div class="zui-media-body">';
-                    $retour .= '<div class="zui-media-body-title"><a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a></div>';
+                    $retour .= '<div class="zui-media-body-title"><a href="' . $cus_links . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a></div>';
                     $retour .= wp_trim_words( $post->post_content, $content, "..." );
                     $retour .= '</div>';
                 } else {
-                    $retour .= '<a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
+                    if ( !empty( $cut ) ) {
+                        $retour .= '<a href="' . $cus_links . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
+                    }
                 }
                 $retour .= '</div>';
                 $retour .= '</div>';
             endwhile;
-            $retour .= '</div>';
             $retour .= '</div>';
 
         } else {
@@ -237,23 +259,32 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
 
                 $retour .= '<div class="zui-medias">';
                 while( $wp_query->have_posts() ) : $wp_query->the_post();
+
+                    //custom links
+                    $cus_links =  get_post_meta( $post->ID, 'cus_links', true );
+                    if( empty($cus_links) ){
+                        $cus_links = get_permalink();
+                    }
+                
                     setup_postdata( $post );
                     $retour .= '<div class="' . $class . '">';
                     $retour .= '<div class="zui-media">';
-                    if ( ! empty( $thumbs ) ) {
-                        $retour .= '<a class="zui-media-cap ' . $position . '" target="_blank" href="'. get_permalink(). '">';
+                    if ( !empty( $thumbs ) ) {
+                        $retour .= '<a class="zui-media-cap ' . $position . '" target="_blank" href="'. $cus_links. '">';
                         if ( has_post_thumbnail() ) {
                             $retour .= get_the_post_thumbnail( $post->ID, $thumbs ); 
                         }
                         $retour .= '</a>';
                     }
-                    if ( ! empty( $content ) ) {
+                    if ( !empty( $content ) ) {
                         $retour .= '<div class="zui-media-body">';
-                        $retour .= '<div class="zui-media-body-title"><a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a></div>';
+                        $retour .= '<div class="zui-media-body-title"><a href="' . $cus_links . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a></div>';
                         $retour .= wp_trim_words( $post->post_content, $content, "..." );
                         $retour .= '</div>';
                     } else {
-                        $retour .= '<a href="' . get_permalink() . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
+                        if ( !empty( $cut ) ) {
+                            $retour .= '<a href="' . $cus_links . '">' . wp_trim_words( $post->post_title, $cut, "..." ) . '</a>';
+                        }
                     }
                     $retour .= '</div>';
                     $retour .= '</div>';
@@ -265,8 +296,6 @@ if ( ! function_exists( 'wizhi_shortcode_photo_list' ) ) {
             $retour .= '</div>';
 
         }
-
-        wizhi_pagination(); 
 
 		return $retour;
 		wp_reset_postdata();
