@@ -375,7 +375,7 @@ if ( ! function_exists( 'wizhi_shortcode_slider' ) ) {
 		global $post;
         $wp_query = new WP_Query( $args );
 
-		$retour = '<div id="bxslider-' . $tax . '" class="bx-box">';
+		$retour = '<div id="bxslider-' . $id . '" class="bx-box">';
 		$retour .= '<ul class="bxslider fix" id="slider-' . $id . '">';
 
 		while( $wp_query->have_posts() ) : $wp_query->the_post();
@@ -417,27 +417,32 @@ add_shortcode( 'slider', 'wizhi_shortcode_slider' );
 
 if ( ! function_exists( 'wizhi_slider_js' ) ) {
 	function wizhi_slider_js( $id, $options ) {
-		?>
-		<script>
-			jQuery(document).ready(function ($) {
-				$(window).load(function () {
+
+        if ( $options["maxslides"] == 1 ) : ?>
+
+    		<script>
+    			jQuery(document).ready(function ($) {
 					$('#slider-<?php echo $id ?>').bxSlider({
-                        mode: '<?php echo $options["mode"] ?>',
-                        useCSS: false,
-                        slideWidth: <?php echo $options['slidewidth'] ?>,
-                        slideMargin: <?php echo $options['slidemargin'] ?>,
-						speed: <?php echo $options['speed'] ?>,
-						auto : <?php echo $options['auto'] ?>,
-                        autoHover: <?php echo $options['autohover'] ?>,
-                        minSlides: <?php echo $options['minslides'] ?>,
-                        maxSlides: <?php echo $options['maxslides'] ?>,
-                        easing: '<?php echo $options["easing"] ?>',
-						pager: true,
-						nav  : false
+                        mode: 'fade',
+                        captions: true
 					});
-				});
-			});
-		</script>
-	<?php
+    			});
+    		</script>
+
+        <?php else : ?>
+
+            <script>
+                jQuery(document).ready(function ($) {
+                    $('#slider-<?php echo $id ?>').bxSlider({
+                        minSlides: <?php echo $options["minslides"] ?>,
+                        maxSlides: <?php echo $options["maxslides"] ?>,
+                        slideWidth: <?php echo $options["slidewidth"] ?>,
+                        slideMargin: <?php echo $options["slidemargin"] ?>
+                    });
+                });
+            </script>
+
+        <?php endif;
+
 	}
 }
